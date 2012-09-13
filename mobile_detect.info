@@ -1,0 +1,11 @@
+name = Mobile Detect
+description = ctools plugins for mobile detection based on <a href='http://code.google.com/p/php-mobile-detect/'>Mobile_Detect.php</a>
+core = 7.x
+
+files[] = mobile_detect.module
+files[] = mobile_detect.install
+files[] = plugins/access/mobile_detect.inc
+
+;;; these are actually soft requirements, as the module will work without them
+;dependencies[] = libraries
+;dependencies[] = ctools
