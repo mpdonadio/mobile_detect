@@ -16,7 +16,7 @@ function mobile_detect_registry_files_alter(&$files, $modules)
 
 /**
  * Getter function to retrieve a Mobile_Detect() singleton for
- * the current page request
+ * the current page request, utilizing static caching
  */
  
 function mobile_detect_get_object()
@@ -34,28 +34,6 @@ function mobile_detect_get_object()
   }
 
   return $detect;
-}
-
-/**
- * Implements hook_ctools_plugin_api().
- */
-
-function mobile_detect_ctools_plugin_api($module, $api)
-{
-  if ($module == 'mobile_detect' && $api == 'mobile_detect') {
-    return array('version' => 3);
-  }
-}
-
-/**
- * Implements hook_ctools_plugin_directory().
- */
-
-function mobile_detect_ctools_plugin_directory($module, $plugin)
-{
-  if ($plugin == 'access') {
-    return 'plugins/' . $plugin;
-  }
 }
 
 /**
