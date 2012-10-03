@@ -42,5 +42,12 @@ function mobile_detect_get_object()
 
 function _mobile_detect_get_library_path()
 {
-  return function_exists('libraries_get_path') ? libraries_get_path('Mobile_Detect') : 'sites/all/libraries/Mobile_Detect';
+  if (function_exists('libraries_get_path')) {
+    $library_path = libraries_get_path('Mobile_Detect');
+    if (! $library_path) $library_path = 'sites/all/libraries/Mobile_Detect';
+  } else {
+    $library_path = 'sites/all/libraries/Mobile_Detect';
+  }
+  
+  return $library_path;
 }

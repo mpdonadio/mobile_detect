@@ -5,4 +5,5 @@ core = 7.x
 files[] = mobile_detect_ctools.module
 files[] = plugins/access/mobile_detect_ctools.inc
 
+dependencies[] = mobile_detect
 dependencies[] = ctools
