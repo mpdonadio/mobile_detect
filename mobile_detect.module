@@ -1,9 +1,13 @@
 <?php
 
 /**
- * Implements hook_registry_files_alter().
+ * @file
+ * This is a lightweight mobile detection based on the Mobile_Detect.php library.
  */
 
+/**
+ * Implements hook_registry_files_alter().
+ */
 function mobile_detect_registry_files_alter(&$files, $modules) {
   $library_path = _mobile_detect_get_library_path();
 
@@ -14,10 +18,8 @@ function mobile_detect_registry_files_alter(&$files, $modules) {
 }
 
 /**
- * Getter function to retrieve a Mobile_Detect() singleton
- * for the current page request, utilizing static caching
+ * Getter function to retrieve a Mobile_Detect() singleton.
  */
-
 function mobile_detect_get_object() {
   $detect = &drupal_static(__FUNCTION__);
 
@@ -26,24 +28,23 @@ function mobile_detect_get_object() {
       $detect = new Mobile_Detect();
     } catch (Exception $e) {
       $detect = NULL;
-      watchdog('mobile_detect', 'Could not create a Mobile_Detect() object: %message', array('%message' => $e -> getMessage()), WATCHDOG_ALERT);
+      watchdog('mobile_detect', 'Could not create a Mobile_Detect() object: %message',
+        array('%message' => $e -> getMessage()), WATCHDOG_ALERT);
     }
-
   }
 
   return $detect;
 }
 
 /**
- * Retrieve the path to the Mobile_Detect library; will use
- * Libraries API if detected.
+ * Retrieve the path to the Mobile_Detect library.
  */
-
 function _mobile_detect_get_library_path() {
   if (function_exists('libraries_get_path')) {
     $library_path = libraries_get_path('Mobile_Detect');
-    if (!$library_path)
+    if (!$library_path) {
       $library_path = 'sites/all/libraries/Mobile_Detect';
+    }
   }
   else {
     $library_path = 'sites/all/libraries/Mobile_Detect';

@@ -1,9 +1,3 @@
 name = Mobile Detect
 description = Lightweight mobile detection based on <a href='http://mobiledetect.net/'>Mobile_Detect.php</a>
 core = 7.x
-
-files[] = mobile_detect.module
-files[] = mobile_detect.install
-
-;;; these are actually soft requirements, as the module will work without them
-;dependencies[] = libraries
