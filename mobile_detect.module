@@ -4,8 +4,7 @@
  * Implements hook_registry_files_alter().
  */
 
-function mobile_detect_registry_files_alter(&$files, $modules)
-{
+function mobile_detect_registry_files_alter(&$files, $modules) {
   $library_path = _mobile_detect_get_library_path();
 
   $files[$library_path . '/Mobile_Detect.php'] = array(
@@ -15,12 +14,11 @@ function mobile_detect_registry_files_alter(&$files, $modules)
 }
 
 /**
- * Getter function to retrieve a Mobile_Detect() singleton for
- * the current page request, utilizing static caching
+ * Getter function to retrieve a Mobile_Detect() singleton
+ * for the current page request, utilizing static caching
  */
- 
-function mobile_detect_get_object()
-{
+
+function mobile_detect_get_object() {
   $detect = &drupal_static(__FUNCTION__);
 
   if (!isset($detect)) {
@@ -37,17 +35,19 @@ function mobile_detect_get_object()
 }
 
 /**
- * Retrieve the path to the Mobile_Detect library; will use Libraries API if detected.
+ * Retrieve the path to the Mobile_Detect library; will use
+ * Libraries API if detected.
  */
 
-function _mobile_detect_get_library_path()
-{
+function _mobile_detect_get_library_path() {
   if (function_exists('libraries_get_path')) {
     $library_path = libraries_get_path('Mobile_Detect');
-    if (! $library_path) $library_path = 'sites/all/libraries/Mobile_Detect';
-  } else {
+    if (!$library_path)
+      $library_path = 'sites/all/libraries/Mobile_Detect';
+  }
+  else {
     $library_path = 'sites/all/libraries/Mobile_Detect';
   }
-  
+
   return $library_path;
 }
