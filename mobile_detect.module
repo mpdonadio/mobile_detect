@@ -2,7 +2,7 @@
 
 /**
  * @file
- * This is a lightweight mobile detection based on the Mobile_Detect.php library.
+ * Lightweight mobile detection based on the Mobile_Detect.php library.
  */
 
 /**
@@ -28,8 +28,8 @@ function mobile_detect_get_object() {
       $detect = new Mobile_Detect();
     } catch (Exception $e) {
       $detect = NULL;
-      watchdog('mobile_detect', 'Could not create a Mobile_Detect() object: %message',
-        array('%message' => $e -> getMessage()), WATCHDOG_ALERT);
+      watchdog('mobile_detect', 'Could instantiate Mobile_Detect(): %message',
+        array('%message' => $e->getMessage()), WATCHDOG_ALERT);
     }
   }
 
