@@ -8,7 +8,7 @@
 /**
  * Implements hook_registry_files_alter().
  *
- * Adds the Mobile_Detect() class to the registry so that autoloading works.
+ * Adds Mobile_Detect() to the class registry so that autoloading works.
  * See http://drupal.stackexchange.com/questions/42266 for a discussion.
  */
 function mobile_detect_registry_files_alter(&$files, $modules) {
