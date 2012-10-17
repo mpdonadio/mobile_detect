@@ -8,7 +8,7 @@
 $plugin = array(
   'title' => t('Mobile Detect: device type'),
   'description' => t('Control access by mobile device type.'),
-  'callback' => 'mobile_detect__access_check',
+  'callback' => 'mobile_detect_ctools_access_check',
   'default' => array('type' => 'view'),
   'settings form' => 'mobile_detect_ctools_access_settings',
   'settings form submit' => 'mobile_detect_ctools_access_settings_submit',
@@ -35,7 +35,7 @@ function mobile_detect_ctools_access_settings($form, &$form_state, $conf) {
   $detect = mobile_detect_get_object();
 
   foreach ($detect->getRules() as $name => $regex) {
-    $form['settings']['type']['#options']['is' . $name] = $name;
+    $form['settings']['type']['#options']['is' . $name] = t('@name', array('@name'=> $name));
   }
 
   return $form;
@@ -45,9 +45,9 @@ function mobile_detect_ctools_access_settings($form, &$form_state, $conf) {
  * The actual access callback.
  */
 function mobile_detect_ctools_access_check($conf, $context) {
-  $detect = mobile_detect_get_object();
+  $type = $conf['type'];
 
-  return $detect->{$conf['type']}();
+  return mobile_detect_check_type($type);
 }
 
 /**

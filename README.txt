@@ -49,6 +49,7 @@ The base module just provides a factory method for creating a singleton
 of the mobile detection class, for use in themes and other modules: 
 
   $detect = mobile_detect_get_object();
+  $is_tablet = $detect->isTablet();
   $is_mobile = $detect->isMobile();
 
 See the documentation for the Mobile_Detect library for more information.

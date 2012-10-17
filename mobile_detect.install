@@ -28,7 +28,8 @@ function mobile_detect_requirements($phase) {
   }
   else {
     $status['value'] = $t('Not found');
-    $status['description'] = $t('Could not find Mobile_Detect.php in %library_path.  See README.txt for installation instructions.', array(
+    $status['description'] = $t('Could not find Mobile_Detect.php in %library_path.  
+                                 See README.txt for installation instructions.', array(
       '%library_path' => $library_path,
     ));
     $status['severity'] = REQUIREMENT_ERROR;

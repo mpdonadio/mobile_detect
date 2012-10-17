@@ -1,3 +1,4 @@
 name = Mobile Detect
 description = Lightweight mobile detection based on <a href='http://mobiledetect.net/'>Mobile_Detect.php</a>
 core = 7.x
+package = Mobile Detect
