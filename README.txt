@@ -40,7 +40,13 @@ the Drupal caches (admin/config/development/performance).
  
 For testing purposes, the demo.php and unit tests included with the 
 library can be deployed, but these should not exist on a live production 
-server. 
+server.
+
+There is also a drush command for downloading the library
+
+ - 'drush dl-mobile-detect' will download Mobile_Detect.php from the HEAD of the GitHub repository.
+ - 'drush dl-mobile-detect --git' will clone Mobile_Detect.php from the HEAD of the GitHub repository, or pull it if
+   you had previously cloned it.
 
 Usage
 -----
