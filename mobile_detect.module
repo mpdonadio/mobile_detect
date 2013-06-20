@@ -11,9 +11,30 @@
 function mobile_detect_help($path, $arg) {
   switch ($path) {
     case 'admin/help#mobile_detect':
-      $output = file_get_contents(dirname(__FILE__) . '/README.txt');
-      return module_exists('markdown') ? filter_xss_admin(module_invoke('markdown', 'filter', 'process', 0, -1, $output)) : '<pre>'. check_plain($output) .'</pre>';
+      return _mobile_detect_get_readme();
   }
+}
+
+function _mobile_detect_get_readme() {
+  $readme = file_get_contents(dirname(__FILE__) . '/README.txt');
+  
+  if (module_exists('markdown')) {
+    $filters = module_invoke('markdown', 'filter_info');
+    $info = $filters['filter_markdown'];
+    
+    if (function_exists($info['process callback'])) {
+      $function = $info['process callback'];
+      $output = filter_xss_admin($function($readme, NULL));
+    }
+    else {
+      $output = '<pre>'. check_plain($readme) .'</pre>';
+    }
+  }
+  else {
+    $output = '<pre>'. check_plain($readme) .'</pre>';
+  }
+  
+  return $output;
 }
 
 /**
