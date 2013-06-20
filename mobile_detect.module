@@ -130,3 +130,124 @@ function _mobile_detect_get_library_path() {
 
   return $library_path;
 }
+
+/**
+ * Implements hook_permission().
+ */
+function mobile_detect_permission() {
+  return array(
+    'view mobile detect debug' => array(
+      'title' => t('View Mobile Detect Debug'),
+      'description' => t('Allows users to view the Mobile Detect debug blocks, etc.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_ctools_block_info().
+ */
+function mobile_detect_ctools_block_info($module, $delta, &$info) {
+  $info['icon'] = 'icon_contrib_block.png';
+  $info['category'] = t('Mobile Detect Blocks');
+}
+
+/**
+ * Implements function hook_block_info().
+ */
+function mobile_detect_block_info() {
+  $blocks = array();
+
+  $blocks['mobile_detect_simple_debug'] = array(
+    'info' => t('Mobile Detect Simple Debug'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['mobile_detect_full_debug'] = array(
+    'info' => t('Mobile Detect Full Debug'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+   return $blocks;
+}
+
+/**
+ * Implements function hook_block_view().
+ */
+function mobile_detect_block_view ($delta) {
+  $block = array();
+
+  if (user_access('view mobile detect debug')) {
+    switch ($delta) {
+      case 'mobile_detect_simple_debug':
+        $block['subject'] = t('Mobile Detect: Simple debug');
+        $block['content'] = array(
+          '#markup' => _mobile_detect_simple_debug(),
+        );
+        break;
+  
+      case 'mobile_detect_full_debug':
+        $block['subject'] = t('Mobile Detect: Full debug');
+        $block['content'] = array(
+          '#markup' => _mobile_detect_full_debug(),
+        );
+        break;
+    }
+  }
+  
+  return $block;
+}
+
+/**
+ * Content generator for hook_block_view('mobile_detect_simple_debug')
+ */
+function _mobile_detect_simple_debug() {
+  $true = t('true');
+  $false = t('false');
+  
+  $detect = mobile_detect_get_object();
+  
+  $output = array();
+  
+  $output[] = '<dl>';
+  
+  $output[] = '<dt>' . t('isMobile') . '</dt>';
+  $output[] = '<dd>' . ($detect->isMobile() ? $true : $false) . '</dd>';
+  
+  $output[] = '<dt>' . t('isTablet') . '</dt>';
+  $output[] = '<dd>' . ($detect->isTablet() ? $true : $false) . '</dd>';
+
+  $output[] = '</dl>';
+  
+  return join('', $output);
+}
+
+/**
+ * Content generator for hook_block_view('mobile_detect_full_debug')
+ */
+function _mobile_detect_full_debug() {
+  $true = t('true');
+  $false = t('false');
+  
+  $detect = mobile_detect_get_object();
+  
+  $output = array();
+  
+  $output[] = '<dl>';
+
+  $output[] = '<dt>' . t('isMobile') . '</dt>';
+  $output[] = '<dd>' . ($detect->isMobile() ? $true : $false) . '</dd>';
+  
+  $output[] = '<dt>' . t('isTablet') . '</dt>';
+  $output[] = '<dd>' . ($detect->isTablet() ? $true : $false) . '</dd>';
+  
+  foreach ($detect->getRules() as $name => $unused) {
+    $predicate = 'is' . $name;
+    
+    $output[] = '<dt>' . t('is@name', array('@name' => $name)) . '</dt>';
+    $output[] = '<dd>' . ($detect->{$predicate}() ? $true : $false) . '</dd>';
+  }
+  
+  $output[] = '</dl>';
+  
+  return join('', $output);
+}
