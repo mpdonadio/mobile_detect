@@ -144,14 +144,6 @@ function mobile_detect_permission() {
 }
 
 /**
- * Implements hook_ctools_block_info().
- */
-function mobile_detect_ctools_block_info($module, $delta, &$info) {
-  $info['icon'] = 'icon_contrib_block.png';
-  $info['category'] = t('Mobile Detect Blocks');
-}
-
-/**
  * Implements function hook_block_info().
  */
 function mobile_detect_block_info() {
