@@ -21,8 +21,15 @@ function mobile_detect_variables_preprocess(&$variables, $hook) {
       if (empty($static)) {
         $detect = mobile_detect_get_object();
         $static = array();
-        $static['is_mobile'] = $detect->isMobile();
-        $static['is_tablet'] = $detect->isTablet();
+        
+        if (!isset($detect)) {
+          $static['is_mobile'] = NULL;
+          $static['is_tablet'] = NULL;
+        }
+         else {
+          $static['is_mobile'] = $detect->isMobile();
+          $static['is_tablet'] = $detect->isTablet();
+        }
       }
       
       $variables['is_mobile'] = $static['is_mobile'];
