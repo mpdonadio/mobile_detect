@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * Implements hook_boot().
+ */
+function mobile_detect_caching_boot() {
+}
+
+/**
+ * Implements hook_init().
+ */
+function mobile_detect_caching_init() {
+}

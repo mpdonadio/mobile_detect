@@ -214,6 +214,9 @@ function _mobile_detect_simple_debug() {
   $output[] = '<dt>' . t('isHandheld') . '</dt>';
   $output[] = '<dd>' . (mobile_detect_check_type('isHandheld') ? $true : $false) . '</dd>';
 
+  $output[] = '<dt>' . t('Request Time') . '</dt>';
+  $output[] = '<dd>' . REQUEST_TIME . '</dd>';
+
   $output[] = '</dl>';
   
   return join('', $output);
@@ -247,7 +250,10 @@ function _mobile_detect_full_debug() {
     $output[] = '<dt>' . t('is@name', array('@name' => $name)) . '</dt>';
     $output[] = '<dd>' . (mobile_detect_check_type($predicate) ? $true : $false) . '</dd>';
   }
-  
+
+  $output[] = '<dt>' . t('Request Time') . '</dt>';
+  $output[] = '<dd>' . REQUEST_TIME . '</dd>';
+
   $output[] = '</dl>';
   
   return join('', $output);
