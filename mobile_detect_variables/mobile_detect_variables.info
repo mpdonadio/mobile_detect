@@ -1,5 +1,5 @@
 name = Mobile Detect Variables
-description = Sub-module to provide $is_mobile and $is_table to preprocess and templates.
+description = Sub-module to provide $is_mobile and $is_tablet to preprocess and templates.
 core = 7.x
 package = Mobile Detect
 
