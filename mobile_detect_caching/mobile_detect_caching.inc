@@ -2,80 +2,65 @@
 
 /**
  * @file
- * Cache backend include for the mobile_detech_caching module.
+ * Cache backend include for the mobile_detect_caching module.
  */
 
 /**
- * Alters $_SERVER['REQUEST_URI'] to add in the mobile detect results, so that
- * the Drupal page caching system will use them as part of the $cid.
+ * Add to settings.php:
+ * $conf['cache_backends'][] = 'sites/all/modules/mobile_detect/mobile_detect_caching/mobile_detect_caching.inc';
+ * $conf['cache_class_cache_page'] = 'MobileDetectCache';
+ * $conf['mobile_detect_library'] = 'sites/all/libraries/Mobile_Detect/Mobile_Detect.php';
  */
-function mobile_detect_caching_alter_cid() {
-  @include_once DRUPAL_ROOT . '/sites/all/libraries/Mobile_Detect/Mobile_Detect.php';
 
-  if (class_exists('Mobile_Detect')) {
-    try {
-      $detect = new Mobile_Detect();
+include_once DRUPAL_ROOT . '/' . variable_get('mobile_detect_library', 'sites/all/libraries/Mobile_Detect/Mobile_Detect.php');
 
-      parse_str($_SERVER['QUERY_STRING'], $query);
-
-      unset($query['mobile_detect_caching_mobile']);
-      unset($query['mobile_detect_caching_notmobile']);
-      unset($query['mobile_detect_caching_tablet']);
-      unset($query['mobile_detect_caching_nottablet']);
-
-      if ($detect->isMobile()) {
-        $query['mobile_detect_caching_mobile'] = NULL;
-      }
-      else {
-        $query['mobile_detect_caching_notmobile'] = NULL;
-      }
-
-      if ($detect->isTablet()) {
-        $query['mobile_detect_caching_tablet'] = NULL;
-      }
-      else {
-        $query['mobile_detect_caching_nottablet'] = NULL;
-      }
-
-      $query = _mobile_detect_http_build_query($query);
-
-      if (($i = strpos($_SERVER['REQUEST_URI'], '?')) === FALSE) {
-        $_SERVER['REQUEST_URI'] .= '?' . $query;
-      }
-      else {
-        $_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $i) . '?' . $query;
-      }
-    } catch (Exception $e) {
-      // nop
-    }
-  }
-}
 
 /**
- * Duplicates drupal_http_build_query() because this function isn't available
- * yet (too early in bootstrap).
+ * Defines a Mobile Detect cache implementation.
  */
-function _mobile_detect_http_build_query(array $query, $parent = '') {
-  $params = array();
+class MobileDetectCache extends DrupalDatabaseCache implements DrupalCacheInterface {
 
-  foreach ($query as $key => $value) {
-    $key = ($parent ? $parent . '[' . rawurlencode($key) . ']' : rawurlencode($key));
-
-    // Recurse into children.
-    if (is_array($value)) {
-      $params [] = _mobile_detect_http_build_query($value, $key);
-    }
-    // If a query parameter value is NULL, only append its key.
-    elseif (!isset($value)) {
-      $params [] = $key;
-    }
-    else {
-      // For better readability of paths in query strings, we decode slashes.
-      $params [] = $key . '=' . str_replace('%2F', '/', rawurlencode($value));
-    }
+  /**
+   * Replace DrupalDatabaseCache::set().
+   */
+  function set($cid, $data, $expire = CACHE_PERMANENT) {
+    $cid = $this->mobile_detect_caching_alter_cid() . $cid;
+    parent::set($cid, $data, $expire);
   }
 
-  return implode('&', $params);
-}
+  /**
+   * Replace DrupalDatabaseCache::getMultiple().
+   */
+  function getMultiple(&$cids) {
+    if (is_array($cids)) {
+      foreach ($cids as $key => $cid) {
+        $cids[$key] = $this->mobile_detect_caching_alter_cid() . $cid;
+      }
+    }
+    return parent::getMultiple($cids);
+  }
 
-mobile_detect_caching_alter_cid();
+  /**
+   * Change $cid depending from the mobile detect results.
+   */
+  protected function mobile_detect_caching_alter_cid() {
+    $device = '';
+
+    if (class_exists('Mobile_Detect')) {
+      try {
+        $detect = new Mobile_Detect();
+
+        if ($detect->isMobile()) {
+          $device = 'mobile:';
+        }
+        elseif ($detect->isTablet()) {
+          $device = 'tablet:';
+        }
+
+      } catch (Exception $e) {
+        // nop
+      }
+    }
+    return $device;
+  }
+}
