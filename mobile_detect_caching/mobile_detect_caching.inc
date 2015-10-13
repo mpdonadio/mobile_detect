@@ -6,22 +6,29 @@
  */
 
 /**
- * Add to settings.php:
+ * Defines a Mobile Detect cache implementation.
+ *
+ * To use this functionality, the following needs to be added to settings.php
+ *
+ * @code
  * $conf['cache_backends'][] = 'sites/all/modules/mobile_detect/mobile_detect_caching/mobile_detect_caching.inc';
  * $conf['cache_class_cache_page'] = 'MobileDetectCache';
  * $conf['mobile_detect_library'] = 'sites/all/libraries/Mobile_Detect/Mobile_Detect.php';
- */
-
-include_once DRUPAL_ROOT . '/' . variable_get('mobile_detect_library', 'sites/all/libraries/Mobile_Detect/Mobile_Detect.php');
-
-
-/**
- * Defines a Mobile Detect cache implementation.
+ * @endcode
  */
 class MobileDetectCache extends DrupalDatabaseCache implements DrupalCacheInterface {
 
   /**
-   * Replace DrupalDatabaseCache::set().
+   * {@inheritdoc}
+   */
+  function __construct($bin) {
+    include_once DRUPAL_ROOT . '/' . variable_get('mobile_detect_library', 'sites/all/libraries/Mobile_Detect/Mobile_Detect.php');
+
+    parent::__construct($bin);
+  }
+
+  /**
+   * {@inheritdoc}
    */
   function set($cid, $data, $expire = CACHE_PERMANENT) {
     $cid = $this->mobile_detect_caching_alter_cid() . $cid;
@@ -29,7 +36,7 @@ class MobileDetectCache extends DrupalDatabaseCache implements DrupalCacheInterf
   }
 
   /**
-   * Replace DrupalDatabaseCache::getMultiple().
+   * {@inheritdoc}
    */
   function getMultiple(&$cids) {
     if (is_array($cids)) {
@@ -41,7 +48,10 @@ class MobileDetectCache extends DrupalDatabaseCache implements DrupalCacheInterf
   }
 
   /**
-   * Change $cid depending from the mobile detect results.
+   * Determines a prefix for the page cache $cid based on devide type.
+   *
+   * @return string
+   *   The $cid prefix
    */
   protected function mobile_detect_caching_alter_cid() {
     $device = '';
@@ -63,4 +73,5 @@ class MobileDetectCache extends DrupalDatabaseCache implements DrupalCacheInterf
     }
     return $device;
   }
+
 }
