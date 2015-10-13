@@ -79,6 +79,8 @@ Mobile variant.
 Drupal Page Cache Support
 -------------------------
 
+Experimental support is provided for working with the Drupal page cache.
+
 To use this, enable the mobile_detect_caching module.  And then add
 to settings.php file:
 

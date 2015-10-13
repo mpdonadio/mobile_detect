@@ -1,5 +1,5 @@
 name = Mobile Detect Caching
-description = Cache handling for Mobile Detect
+description = Cache handling for Mobile Detect (EXPERIMENTAL! USE AT OWN RISK!)
 core = 7.x
 package = Mobile Detect
 
