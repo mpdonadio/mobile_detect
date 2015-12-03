@@ -1,4 +1,5 @@
-type: module
 name: Mobile Detect
-description: 'Lightweight mobile detection based on <a href='http://mobiledetect.net/'>Mobile_Detect.php</a>.'
+type: module
+description: 'Lightweight mobile detection based on Mobile_Detect.php'
+core: 8.x
 package: 'Mobile Detect'
